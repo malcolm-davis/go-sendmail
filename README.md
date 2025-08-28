@@ -117,7 +117,7 @@ func main() {
 
 #### smtp2go
 
-```
+```go
 package main
 
 import (
@@ -216,8 +216,7 @@ func main() {
 
 #### MailTrap with image and multiple recipients
 
-```
-
+```go
 import (
     "fmt"
     "log/slog"
