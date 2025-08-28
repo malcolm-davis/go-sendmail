@@ -75,12 +75,9 @@ func (mj *MailJetMailManager) SendMessage(message *Message) (response *Response,
 		timer.StopE(err)
 	}()
 
-	if len(message.Recipients) == 0 {
-		return nil, fmt.Errorf("missing recipient(s) address")
-	}
-
-	if message.FromEmail == nil {
-		return nil, fmt.Errorf("missing from email address")
+	err = message.Validate()
+	if err != nil {
+		return nil, err
 	}
 
 	recipientList := mailjet.RecipientsV31{}

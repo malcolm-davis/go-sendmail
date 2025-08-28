@@ -1,6 +1,7 @@
 package sendmail
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -25,6 +26,19 @@ type Message struct {
 	PlainTextContent string        `json:"text,omitempty"`
 	HtmlContent      string        `json:"html,omitempty"`
 	Attachments      []*Attachment `json:"attachments,omitempty"`
+}
+
+var ErrMissingRecipients = errors.New("sendmail: missing recipient(s) address")
+var ErrMissingFrom = errors.New("sendmail: missing 'from' email address")
+
+func (m *Message) Validate() error {
+	if m.FromEmail == nil {
+		return ErrMissingFrom
+	}
+	if len(m.Recipients) == 0 {
+		return ErrMissingRecipients
+	}
+	return nil
 }
 
 type MessageBuilder interface {

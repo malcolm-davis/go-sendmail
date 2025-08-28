@@ -1,8 +1,16 @@
 # go-sendmail
 
-## Overview
+## Summary
 
 go-sendmail is a wrapper to mail service libraries.
+
+## Overview
+
+Each mail service requires registration, which includes configuring the domain's DNS for the specific service using a combination of CNAME & TXT additions.
+
+Some of the services also require a knowledge of who is allowed to send emails from the domain, which helps restrict access.
+
+Restricting the use of a domain in the 'from' email clause makes sense because libraries are generally intended to be part of an automated process, rather than originating from multiple users within a domain.
 
 ### Features
 

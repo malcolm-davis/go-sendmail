@@ -53,12 +53,9 @@ func (t *TrilloSendMail) SendMessage(message *Message) (response *Response, err 
 		timer.StopE(err)
 	}()
 
-	if len(message.Recipients) == 0 {
-		return nil, fmt.Errorf("missing recipient(s) address")
-	}
-
-	if message.FromEmail == nil {
-		return nil, fmt.Errorf("missing from email address")
+	err = message.Validate()
+	if err != nil {
+		return nil, err
 	}
 
 	from := mail.NewEmail(message.FromEmail.Name, message.FromEmail.Address)
