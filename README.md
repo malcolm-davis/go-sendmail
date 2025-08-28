@@ -18,7 +18,7 @@ go-sendmail is a wrapper to mail service libraries.
 - MailerSend Go Lib at  https://github.com/mailersend/mailersend-go
 - MailJet Go Lib at https://github.com/mailjet/mailjet-apiv3-go
 - smtp2go Go Lib at https://github.com/smtp2go-oss/smtp2go-go
-- mailtrap - wrapper around mailtrap json lib
+- mailtrap - wrapper around mailtrap json api request
 
 
 ### Install
