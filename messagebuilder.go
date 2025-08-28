@@ -2,7 +2,6 @@ package sendmail
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -30,6 +29,7 @@ type Message struct {
 
 var ErrMissingRecipients = errors.New("sendmail: missing recipient(s) address")
 var ErrMissingFrom = errors.New("sendmail: missing 'from' email address")
+var ErrMissingSubject = errors.New("sendmail: missing subject")
 
 func (m *Message) Validate() error {
 	if m.FromEmail == nil {
@@ -37,6 +37,9 @@ func (m *Message) Validate() error {
 	}
 	if len(m.Recipients) == 0 {
 		return ErrMissingRecipients
+	}
+	if m.Subject == "" {
+		return ErrMissingSubject
 	}
 	return nil
 }
@@ -105,14 +108,8 @@ func (m *messageBuilder) AddAttachment(contentType, filename, base64Content stri
 }
 
 func (m *messageBuilder) Build() (*Message, error) {
-	if m.emailMessage.FromEmail == nil {
-		return nil, fmt.Errorf("missing from email address")
-	}
-	if len(m.emailMessage.Recipients) == 0 {
-		return nil, fmt.Errorf("missing recipient(s) address")
-	}
-	if m.emailMessage.Subject == "" {
-		return nil, fmt.Errorf("missing subject")
+	if err := m.emailMessage.Validate(); err != nil {
+		return nil, err
 	}
 	return m.emailMessage, nil
 }
