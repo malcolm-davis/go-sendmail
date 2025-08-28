@@ -1,5 +1,4 @@
-// Wrapper to Smtp2go Go Library
-// https://github.com/Smtp2go/Smtp2go-apiv3-go
+// There is no golang API provided for mailtrap
 package sendmail
 
 import (
@@ -37,7 +36,7 @@ func (ms *MailTrap) SendMail(fromName, fromEmail, toName, toEmail, subject, plai
 		timer.StopE(err)
 	}()
 
-	// format
+	// mailtrap format
 	// message := []byte(`{
 	//     "from":{"email":"john.doe@your.domain"},
 	//     "to":[{"email":"kate.doe@example.com"}],
@@ -45,13 +44,6 @@ func (ms *MailTrap) SendMail(fromName, fromEmail, toName, toEmail, subject, plai
 	//     "text":"Here’s the space for your great sales pitch",
 	//     "html":"<strong>Here’s the space for your great sales pitch</strong>"
 	// }`)
-
-	// from := fmt.Sprintf(`"from":{"email":"%s"}`, fromEmail)
-	// to := fmt.Sprintf(`"to":[{"email":"%s"}]`, toEmail)
-	// sub := fmt.Sprintf(`"subject":"%s"`, subject)
-	// content := fmt.Sprintf(`"text":"%s"`, plainTextContent)
-	// html := fmt.Sprintf(`{"html":%s"}`, htmlContent)
-	// message := []byte(fmt.Sprintf("{%s,%s,%s,%s,%s}", from, to, sub, content, html))
 
 	messageBuilder := NewEmailMessage()
 	messageBuilder.FromEmail(fromName, fromEmail)
@@ -86,6 +78,7 @@ func (ms *MailTrap) SendMessage(message *Message) (response *Response, err error
 		return nil, fmt.Errorf("missing from email address")
 	}
 
+	// mailtrap format
 	//  message := []byte(`{
 	//     "from":{"email":"john.doe@your.domain"},
 	//     "to":[
