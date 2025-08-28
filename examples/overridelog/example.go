@@ -1,0 +1,49 @@
+package main
+
+import (
+	"fmt"
+	"log/slog"
+	"os"
+
+	"github.com/malcolm-davis/go-sendmail"
+)
+
+func main() {
+	fmt.Println("Starting mailersend example")
+	fmt.Println("Make sure to set MAILERSEND_API_TOKEN")
+	send, err := sendmail.NewMailerSend(os.Getenv("MAILERSEND_API_TOKEN"))
+	if err != nil {
+		slog.Error("Error connecting to mailersend service", "error", err)
+		return
+	}
+
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	send.Logger = func(format string, args ...interface{}) {
+		// slog.Debug(fmt.Sprintf(format, args...))
+		logger.Info(format, args...)
+	}
+	messageBuilder := sendmail.NewEmailMessage()
+
+	// Note: the from email address requires authentication in MailJet
+	messageBuilder.FromEmail("do-not-reply", "do-not-reply@example.com")
+	messageBuilder.AddRecipient("user", "user@example.com")
+	messageBuilder.Subject("contact us email")
+	messageBuilder.PlainTextContent("Test mailjet")
+	messageBuilder.HtmlContent("<strong>and easy to do anywhere, even with Go</strong>")
+
+	message, err := messageBuilder.Build()
+	if err != nil {
+		slog.Error("Error building message", "error", err)
+		return
+	}
+	response, err := send.SendMessage(message)
+	if err != nil {
+		slog.Error("Error sending message", "error", err)
+		return
+	}
+
+	// if the response is successful, print the status code 200
+	// however, if the from email address is not a verified domain in mailjet, a 200 will be returned, but no mail delivery will occur
+	fmt.Println("response.StatusCode", response.StatusCode)
+
+}
